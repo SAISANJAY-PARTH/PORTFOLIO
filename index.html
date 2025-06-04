@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sai Sanjay | Portfolio</title>
+
+  <!-- FontAwesome for social icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Roboto+Mono:wght@400&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    /* CSS Variables */
+    :root {
+      --primary-color: #1e3a8a; /* Darker blue for better contrast */
+      --accent-color: #f59e0b; /* Softer amber for accessibility */
+      --background-color: #f1f5f9; /* Softer light gray */
+      --text-color: #0f172a; /* Darker slate for readability */
+      --card-bg: rgba(255, 255, 255, 0.98); /* Slightly opaque white */
+      --shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* Subtler shadow */
+      --border-radius: 12px; /* Consistent rounded corners */
+      --transition: all 0.2s ease; /* Faster transitions for hover */
+    }
+
+    /* Reset & Base */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: var(--background-color);
+      color: var(--text-color);
+      line-height: 1.7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    /* Loader */
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--background-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    }
+
+    #loader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid var(--primary-color);
+      border-top: 4px solid var(--accent-color);
+      border-radius: 50%;
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: var(--card-bg);
+      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow);
+      padding: 1rem;
+      z-index: 1000;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+    }
+
+    nav a {
+      color: var(--primary-color);
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 1.1rem;
+      padding: 0.5rem 0;
+      position: relative;
+    }
+
+    nav a:hover,
+    nav a:focus {
+      color: var(--accent-color);
+      outline: none;
+      border-bottom: 2px solid var(--accent-color);
+    }
+
+    /* Hamburger Menu */
+    .hamburger {
+      display: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--primary-color);
+      padding: 0.5rem;
+    }
+
+    .hamburger:focus {
+      outline: 2px solid var(--accent-color);
+      outline-offset: 2px;
+    }
+
+    /* Header */
+    header {
+      margin-top: 5rem;
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      padding: 3rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: var(--border-radius);
+    }
+
+    header h1 {
+      font-size: 3rem;
+      color: #fff;
+      position: relative;
+      z-index: 1;
+      font-weight: 700;
+    }
+
+    header p {
+      color: #e5e7eb;
+      font-size: 1.2rem;
+      margin-top: 0.5rem;
+      position: relative;
+      z-index: 1;
+      font-family: 'Roboto Mono', monospace;
+    }
+
+    /* Social Links */
+    .social-links {
+      margin-top: 2rem;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      background: #1e293b;
+      padding: 1rem 2rem;
+      border-radius: var(--border-radius);
+      position: relative;
+      z-index: 1;
+      box-shadow: var(--shadow);
+    }
+
+    .social-links a {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 600;
+      font-size: 1.1rem;
+      padding: 0.5rem;
+      transition: var(--transition);
+    }
+
+    .social-links a i {
+      margin-right: 0.5rem;
+      font-size: 1.3rem;
+    }
+
+    .social-links a:hover,
+    .social-links a:focus {
+      color: var(--accent-color);
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      outline: none;
+    }
+
+    /* Summary */
+    .summary {
+      margin-top: 2rem;
+      color: #e5e7eb;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+    }
+
+    /* Sections */
+    section {
+      width: 100%;
+      max-width: 1200px;
+      background: var(--card-bg);
+      backdrop-filter: blur(8px);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+    }
+
+    section h2 {
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--accent-color);
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+      font-size: 1.8rem;
+    }
+
+    /* Education & Project Items */
+    .edu-item,
+    .project-item {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    .edu-item:last-child,
+    .project-item:last-child {
+      border-bottom: none;
+    }
+
+    .edu-logo {
+      flex-shrink: 0;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      object-fit: contain;
+      background: #e5e7eb;
+      padding: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .edu-logo:hover,
+    .edu-logo:focus {
+      border: 2px solid var(--accent-color);
+      outline: none;
+    }
+
+    .edu-content,
+    .project-content {
+      flex: 1;
+    }
+
+    .edu-content h3,
+    .project-title {
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-color);
+      font-weight: 600;
+    }
+
+    .project-title a {
+      color: var(--text-color);
+      text-decoration: none;
+      position: relative;
+    }
+
+    .project-title a:hover,
+    .project-title a:focus {
+      color: var(--accent-color);
+      border-bottom: 2px solid var(--accent-color);
+      outline: none;
+    }
+
+    .edu-content .degree,
+    .project-duration {
+      font-weight: 600;
+      color: #4b5563;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .edu-content .duration,
+    .project-duration {
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-bottom: 0.75rem;
+    }
+
+    .edu-content .desc,
+    .project-desc {
+      font-size: 1rem;
+      color: var(--text-color);
+      white-space: pre-line;
+    }
+
+    .skills {
+      font-style: italic;
+      color: var(--primary-color);
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+
+    /* Skills Section */
+    #skills .skill-item {
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    #skills .skill-name {
+      font-weight: 600;
+      color: var(--primary-color);
+      flex: 1;
+    }
+
+    #skills .skill-percentage {
+      font-weight: 600;
+      color: var(--accent-color);
+      font-size: 0.9rem;
+      min-width: 50px;
+      text-align: right;
+    }
+
+    #skills .progress-bar {
+      width: 100%;
+      height: 12px;
+      background: #e5e7eb;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    #skills .progress {
+      height: 100%;
+      background: var(--accent-color);
+    }
+
+    /* Contact Section */
+    #contact p {
+      font-size: 1.1rem;
+      color: var(--text-color);
+      margin: 0.75rem 0;
+    }
+
+    #contact a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    #contact a:hover,
+    #contact a:focus {
+      color: var(--accent-color);
+      border-bottom: 2px solid var(--accent-color);
+      outline: none;
+    }
+
+    /* Resume Link */
+    .resume-link {
+      margin-top: 1.5rem;
+      text-align: center;
+    }
+
+    .resume-link a {
+      display: inline-block;
+      background: var(--accent-color);
+      color: white;
+      padding: 0.75rem 2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .resume-link a:hover,
+    .resume-link a:focus {
+      background: var(--primary-color);
+      outline: none;
+      box-shadow: var(--shadow);
+    }
+
+    /* Back to Top Button */
+    #back-to-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--primary-color);
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      transition: var(--transition);
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    #back-to-top.hidden {
+      display: none;
+    }
+
+    #back-to-top:hover,
+    #back-to-top:focus {
+      background: var(--accent-color);
+      outline: none;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      body {
+        padding: 1.5rem 0.75rem;
+      }
+
+      nav {
+        padding: 0.75rem;
+      }
+
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: var(--card-bg);
+        padding: 1rem;
+        box-shadow: var(--shadow);
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .hamburger {
+        display: block;
+      }
+
+      header h1 {
+        font-size: 2.2rem;
+      }
+
+      header p {
+        font-size: 1rem;
+      }
+
+      .edu-item,
+      .project-item {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .edu-logo {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 1rem;
+      }
+
+      section {
+        padding: 1.5rem;
+      }
+
+      #skills .skill-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      #skills .skill-percentage {
+        text-align: left;
+      }
+
+      .social-links {
+        flex-wrap: wrap;
+        padding: 0.75rem;
+        gap: 1rem;
+      }
+
+      .summary {
+        font-size: 1rem;
+        padding: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      nav a {
+        font-size: 0.95rem;
+      }
+
+      header {
+        margin-top: 4rem;
+        padding: 1.5rem;
+      }
+
+      .social-links a {
+        font-size: 1rem;
+      }
+
+      .social-links a i {
+        font-size: 1.1rem;
+      }
+
+      .summary {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loader -->
+  <div id="loader" aria-hidden="true">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <div class="hamburger" aria-label="Toggle menu" tabindex="0">
+        <i class="fas fa-bars"></i>
+      </div>
+      <div class="nav-links">
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#education">Education</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header>
+    <h1>Sai Sanjay</h1>
+    <p>Full-Stack Developer | Data Analyst | Financial Literacy Advocate</p>
+    <div class="social-links">
+      <a href="https://www.linkedin.com/in/sai-s-198a14276/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <i class="fab fa-linkedin" aria-hidden="true"></i> LinkedIn
+      </a>
+      <a href="https://github.com/SAISANJAY-PARTH" target="_blank" rel="noopener" aria-label="GitHub">
+        <i class="fab fa-github" aria-hidden="true"></i> GitHub
+      </a>
+      <a href="https://x.com/saisanjayparth" target="_blank" rel="noopener" aria-label="Twitter">
+        <i class="fab fa-twitter" aria-hidden="true"></i> Twitter
+      </a>
+      <a href="https://www.instagram.com/saisanjay_1/" target="_blank" rel="noopener" aria-label="Instagram">
+        <i class="fab fa-instagram" aria-hidden="true"></i> Instagram
+      </a>
+    </div>
+    <div class="summary">
+      Analytical and detail-oriented Data Analyst with a strong foundation in financial concepts, data manipulation, and visual storytelling. Skilled in Excel, Python (NumPy, Pandas), SQL, Power BI, and Matplotlib with hands-on project experience in financial dashboards, consumer behavior analysis, and budgeting models. Currently pursuing NISM certifications (Investment Adviser, Research Analyst, Mutual Funds) to strengthen domain expertise in personal finance and investment strategy. Adept at transforming financial goals into actionable insights and leveraging technology for decision-making. Background in full-stack web development (HTML, CSS, JavaScript, PHP, MySQL), enabling efficient data-driven solutions and dynamic reporting platforms.
+    </div>
+  </header>
+
+  <main>
+    <!-- Projects Section -->
+    <section id="projects" aria-labelledby="projects-heading">
+      <h2 id="projects-heading">Projects</h2>
+      <article class="project-item">
+        <div class="project-content">
+          <h3 class="project-title">
+            <a href="https://youtu.be/D1LiZ-41bto" target="_blank" rel="noopener">FinWise Academy</a>
+          </h3>
+          <p class="project-duration">Apr 2024 - May 2024</p>
+          <p class="project-desc"> FinWise Academy is a web-based platform focused on enhancing financial literacy and helping users achieve financial independence. It offers a suite of financial calculators (SIP, FD, Loan EMI, PPF, EPF, CAGR, Rental Yield, Net Salary, Inflation) to support budgeting, saving, and investment planning.
+          
+            The platform features a personalized dashboard where users can access calculators, view/download their calculation history (TXT/Excel), and manage their accounts. Built with HTML, CSS (Bootstrap), JavaScript, and PHP for dynamic interactions, it includes smooth modals, animations, and AJAX-based login/signup functionality. User data is stored securely in a MySQL database (user_auth), with prepared statements and SSL deployment practices for security.
+          
+            Signup generates a secure 6-character code and stores user details; Login validates and redirects users to dashboard.php. A contact form logs queries into the database, and a history page enables users to track and manage past calculations.
+          
+            The UI includes a responsive design, navigation bar, social media links (Instagram, LinkedIn, X, GitHub), and a splash screen with animated logo. Educational content and modals (like “My Expertise”) offer guidance on budgeting and saving strategies.
+          
+            FinWise Academy’s mission is to make financial literacy accessible to everyone, encouraging informed financial decisions and long-term growth.
+          </p>
+          <p class="skills">Technologies: HTML, CSS, JavaScript, PHP, MySQL</p>
+        </div>
+      </article>
+      <article class="project-item">
+        <div class="project-content">
+          <h3 class="project-title">
+            <a href="https://github.com/SAISANJAY-PARTH/data-visualization-using-excel" target="_blank" rel="noopener">Bike Sales Analysis</a>
+          </h3>
+          <p class="project-duration">Mar 2024</p>
+          <p class="project-desc"> Analyzed and cleaned a dataset of bike sales using Excel. Leveraged pivot tables to uncover insights around customer demographics, income, age, region, and commute behavior. Created an interactive dashboard to visualize key trends and KPIs for strategic decision-making. Gained expertise in using Excel for quick, effective data analysis, providing actionable insights without the need for complex tools like Power BI.
+          </p>
+          <p class="skills">Technologies: Microsoft Excel</p>
+        </div>
+      </article>
+      <article class="project-item">
+        <div class="project-content">
+          <h3 class="project-title">
+            <a href="https://youtu.be/hA7L3zTqE2s" target="_blank" rel="noopener">FinWise Notes App</a>
+          </h3>
+          <p class="project-duration">Dec 2023</p>
+          <p class="project-desc">FinWise Notes App is a fully responsive, browser-based productivity tool built for efficient note-taking and task management. It supports both free-form text notes and interactive checklist-style notes, with the ability to download notes locally as .txt files—ideal for offline access or quick backups.
+ 
+            Key Features:
+            <ul>
+              <li>📝 Dual modes: plain text & checklist</li>
+              <li>💾 Save notes locally as .txt</li>
+              <li>🌙 Dark mode toggle for eye comfort</li>
+              <li>⏰ Alarm/reminder system with custom messages</li>
+              <li>🌐 Timezone selector for global use</li>
+              <li>🕒 Integrated analog & digital clocks for real-time tracking</li>
+            </ul>
+            Developed using HTML, CSS, and JavaScript, the app delivers a reliable, lightweight experience with a clean, intuitive interface. It runs without external libraries or dependencies, ensuring compatibility and performance across all modern browsers and devices.
+          </p>
+          <p class="skills">Technologies: HTML, CSS, JavaScript</p>
+        </div>
+      </article>
+      <article class="project-item">
+        <div class="project-content">
+          <h3 class="project-title">
+            <a href="https://youtu.be/Vu5mHCYnCoU" target="_blank" rel="noopener">Ana/Dig Clock</a>
+          </h3>
+          <p class="project-duration">Jun 2023</p>
+          <p class="project-desc">The Clock Project is a real-time, browser-based application designed to display the current system time using a visually appealing interface. Developed with core web technologies—HTML, CSS, and JavaScript—the project offers a practical implementation of time management and user interface interaction. The clock continuously updates every second to reflect the exact time, ensuring accuracy and responsiveness.
+          
+            The application can be presented in two formats: digital and analog. In the digital version, the time is shown numerically with hour, minute, and second components, offering 12-hour or 24-hour format toggle. The analog version mimics a traditional clock, using dynamically rotated hour, minute, and second hands built using CSS transformations and JavaScript.
+          
+            Additional features can include:
+            <ul>
+              <li>Live Date Display – showing the current day, month, and year.</li>
+              <li>Custom Themes – allowing users to switch between light and dark modes.</li>
+              <li>Alarm Functionality – enabling users to set specific time-based alerts with sound notifications.</li>
+              <li>Responsive Design – ensuring compatibility across desktops, tablets, and mobile devices.</li>
+            </ul>
+            <br>
+            From a technical standpoint, the project leverages setInterval() for continuous time updates, Date object methods to extract real-time values, and DOM manipulation to reflect changes in the UI. The design focuses on clean layout, readability, and intuitive controls.
+
+          
+            Overall, the Clock Project serves as a robust timekeeping tool while demonstrating effective use of JavaScript for real-time functionality and CSS for creative UI/UX design.
+          </p>
+          <p class="skills">Technologies: HTML, CSS, JavaScript</p>
+        </div>
+      </article>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" aria-labelledby="skills-heading">
+      <h2 id="skills-heading">Skills</h2>
+      <div class="skill-item">
+        <div class="skill-name">Full-Stack Development</div>
+        <div class="skill-percentage">90%</div>
+        <div class="progress-bar"><div class="progress" style="width: 90%;"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-name">Data Analysis</div>
+        <div class="skill-percentage">85%</div>
+        <div class="progress-bar"><div class="progress" style="width: 85%;"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-name">Financial Literacy Advocacy</div>
+        <div class="skill-percentage">80%</div>
+        <div class="progress-bar"><div class="progress" style="width: 80%;"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-name">HTML, CSS, JavaScript</div>
+        <div class="skill-percentage">95%</div>
+        <div class="progress-bar"><div class="progress" style="width: 95%;"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-name">PHP, MySQL</div>
+        <div class="skill-percentage">85%</div>
+        <div class="progress-bar"><div class="progress" style="width: 85%;"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-name">Excel, Python</div>
+        <div class="skill-percentage">80%</div>
+        <div class="progress-bar"><div class="progress" style="width: 80%;"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-name">Python (NumPy, Pandas)</div>
+        <div class="skill-percentage">75%</div>
+        <div class="progress-bar"><div class="progress" style="width: 75%;"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-name">Data Visualization</div>
+        <div class="skill-percentage">85%</div>
+        <div class="progress-bar"><div class="progress" style="width: 85%;"></div></div>
+      </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" aria-labelledby="education-heading">
+      <h2 id="education-heading">Education</h2>
+      <article class="edu-item">
+        <img src="images.png" alt="Symbiosis International University Logo" class="edu-logo" loading="lazy" />
+        <div class="edu-content">
+          <h3>Symbiosis International University</h3>
+          <p class="degree">Bachelor of Computer Applications (BCA)</p>
+          <p class="duration">July 2023 - Present</p>
+          <p class="desc"> Currently pursuing BCA. Focused on web development, data analysis, and financial technology.
+          </p>
+        </div>
+      </article>
+      <article class="edu-item">
+        <img src="5a4ef9b9d7806da10afb1e9b3efdb22d.jpg" alt="Kendriya Vidyalaya Logo" class="edu-logo" loading="lazy">
+        <div class="edu-content">
+          <h3>Kendriya Vidyalaya</h3>
+          <p class="degree">High School Diploma</p>
+          <p class="duration">2011 - Mar 2021</p>
+          <p class="desc"> I actively participated in various club and vocational activities, showcasing leadership and communication skills. I served as the Foreign Minister at the Youth Parliament program, demonstrating my aptitude for debate. I also held the position of School Captain at Kendriya Vidyalaya, Jawaharlal Nehru University campus, where I led and motivated students effectively. I was also a rank holder in the Kendriya Vidyalaya Debate Competition for the academic year 2020-21, reflecting my strong debating and critical thinking abilities. Furthermore, I coordinated the Independence Day celebration, successfully organizing the event with dedication.
+          </p>
+        </div>
+      </article>
+    </section>
+
+    <!-- Contact Section -->
+    <!-- Contact Section -->
+<section id="contact" aria-labelledby="contact-heading">
+  <h2 id="contact-heading">Contact</h2>
+  <p>Email: <a href="mailto:saireshi19@gmail.com">saireshi19@gmail.com</a></p>
+  
+</section>
+  </main>
+
+  <!-- Back to Top Button -->
+  <div id="back-to-top" class="hidden" aria-label="Back to top">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+
+  <script>
+    // Utility Functions
+    const toggleClass = (element, className) => element.classList.toggle(className);
+    const addClass = (element, className) => element.classList.add(className);
+    const removeClass = (element, className) => element.classList.remove(className);
+
+    // Loader
+    window.addEventListener('load', () => {
+      const loader = document.getElementById('loader');
+      setTimeout(() => addClass(loader, 'hidden'), 500);
+    });
+
+    // Hamburger Menu
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+    hamburger.addEventListener('click', () => toggleClass(navLinks, 'active'));
+    hamburger.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleClass(navLinks, 'active');
+      }
+    });
+
+    // Back to Top Button
+    const backToTop = document.getElementById('back-to-top');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        removeClass(backToTop, 'hidden');
+      } else {
+        addClass(backToTop, 'hidden');
+      }
+    });
+
+    backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    backToTop.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+
+    // Sticky Navigation (Simplified)
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.scrollY;
+      const nav = document.querySelector('nav');
+      if (currentScroll > lastScroll && currentScroll > 100) {
+        nav.style.top = '-100%';
+      } else {
+        nav.style.top = '0';
+      }
+      lastScroll = currentScroll;
+    });
+
+    // Social Links Debug
+    document.querySelectorAll('.social-links a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        if (!link.href || link.href === '#') {
+          e.preventDefault();
+          console.error(`Invalid href for link: ${link.textContent}`);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
